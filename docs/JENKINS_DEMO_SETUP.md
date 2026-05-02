@@ -57,9 +57,10 @@ Important warning:
 
 - `Jenkinsfile.demo`:
   - Safe local pipeline for viva.
-  - Uses Windows-friendly `bat` steps.
-  - Does not fail whole build if Docker/kubectl/Trivy are unavailable in Jenkins agent.
-  - Marks optional tool stages as **UNSTABLE** instead of failing.
+  - Cross-platform (`isUnix()`): uses `sh` on Linux/macOS agents and `bat` on Windows agents.
+  - Finishes **SUCCESS** when checkout + virtualenv + dependency install + pytest pass.
+  - Optional Docker/kubectl/Trivy stages are skipped cleanly when tools are unavailable in Jenkins container.
+  - Full deployment proof remains the host Minikube runtime evidence/screenshots.
 
 - Manual runtime verification (already done):
   - Minikube blue-green deployment, traffic switch/rollback, Trivy, and security checks verified via terminal.
