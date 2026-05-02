@@ -10,6 +10,30 @@
 
 ![Blue-Green DevOps Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcW5lYzh5Nml1Z3cyMXNwaHp4ZW9xODQ5a2x5dDg5aTI3NGowc3h5NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlBO7eyXzSZkJri/giphy.gif)
 
+## 🚀 Quick Access
+
+- GitHub Repo: [secure-healthcare-bluegreen-devops](https://github.com/kulharshit21/secure-healthcare-bluegreen-devops)
+- Latest Release: [v1.0.0](https://github.com/kulharshit21/secure-healthcare-bluegreen-devops/releases/tag/v1.0.0)
+- Runtime Evidence: [`docs/FINAL_RUNTIME_EVIDENCE.md`](docs/FINAL_RUNTIME_EVIDENCE.md)
+- Jenkins Demo Setup: [`docs/JENKINS_DEMO_SETUP.md`](docs/JENKINS_DEMO_SETUP.md)
+- Viva Script: [`docs/VIVA_DEMO_SCRIPT_FINAL.md`](docs/VIVA_DEMO_SCRIPT_FINAL.md)
+
+## ✅ Verified Demo Snapshot
+
+| Check | Status |
+|---|---|
+| Python tests | `12 passed` |
+| Minikube node | `Ready` |
+| Blue deployment | Running |
+| Green deployment | Running |
+| Blue->Green switch | Verified |
+| Green->Blue rollback | Verified |
+| Container runtime user/group | `uid=1000 gid=1000` |
+| Trivy critical findings | `0` |
+| Jenkins full runtime on local machine | Not executed |
+
+> This repository is optimized for assignment/viva demonstration with reproducible local proof.
+
 ---
 
 ## 📋 Table of Contents
