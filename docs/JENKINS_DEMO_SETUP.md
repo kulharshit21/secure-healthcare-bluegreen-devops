@@ -64,3 +64,12 @@ Important warning:
 
 - Manual runtime verification (already done):
   - Minikube blue-green deployment, traffic switch/rollback, Trivy, and security checks verified via terminal.
+
+## Recommended Jenkins Screenshots
+
+1. Jenkins dashboard URL and logged-in UI
+2. Job: `healthcare-bluegreen-demo`
+3. Build history with SUCCESS
+4. Stage view for Jenkinsfile.demo
+5. Console output showing virtualenv creation + pytest (`12 passed`)
+6. Console output showing optional Docker/kubectl/Trivy stages skipped cleanly (if absent)

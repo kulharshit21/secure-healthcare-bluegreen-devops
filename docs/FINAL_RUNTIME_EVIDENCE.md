@@ -12,8 +12,8 @@
 - Trivy:
   - `trivy --version` -> `Version: 0.70.0`
 - Jenkins:
-  - `Get-Service *jenkins* -ErrorAction SilentlyContinue` returned no service
-  - Jenkins runtime was not executed on this machine
+  - Jenkins Docker container runtime was executed for demo pipeline
+  - Jenkins fetched `Jenkinsfile.demo` from GitHub and completed CI demo run
 
 ## 2) Python Test Proof
 
@@ -94,15 +94,20 @@ Because `kubectl port-forward` can pin to an existing backend, the main port-for
 
 ## 9) Jenkins Demo Runtime Status
 
-- Jenkins service check:
-  - `Get-Service *jenkins* -ErrorAction SilentlyContinue` returned no service
-- Jenkins Docker check:
-  - `docker ps -a | findstr jenkins` returned no container
-- Status:
-  - `Jenkinsfile.demo` prepared for Jenkins demo
-  - Jenkins demo execution requires Jenkins setup
-  - Jenkins was not executed in this environment during this verification cycle
+- Jenkins source:
+  - Jenkins obtained `Jenkinsfile.demo` from GitHub repository
+- Jenkins execution behavior:
+  - checkout completed
+  - virtualenv created
+  - dependencies installed in virtualenv
+  - pytest executed
+  - result: `12 passed`
+  - build result: `Finished: SUCCESS`
+- Optional tooling behavior inside Jenkins Docker:
+  - Docker/kubectl/Trivy stages skipped cleanly when tools were unavailable in container
+- Scope note:
+  - Full Docker/Kubernetes/Trivy runtime proof remains captured from host Minikube terminal verification
 
 ## Final Statement
 
-Runtime-verified locally on Minikube except Jenkins execution.
+Runtime-verified locally on Minikube, with Jenkins CI demo execution verified via `Jenkinsfile.demo`.

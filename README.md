@@ -2,6 +2,8 @@
 
 **A comprehensive DevOps assignment demonstrating secure CI/CD pipeline automation, containerization, and zero-downtime deployment strategy**
 
+## Secure CI/CD Pipeline for Automated Blue-Green Deployment of a Dockerized Healthcare Application on Kubernetes using Jenkins
+
 ![Build Status](https://img.shields.io/badge/build-manual%20verified-success?style=for-the-badge)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-minikube-blue?style=for-the-badge&logo=kubernetes)
 ![Jenkins Demo](https://img.shields.io/badge/jenkins-demo%20pipeline-orange?style=for-the-badge&logo=jenkins)
@@ -33,6 +35,53 @@
 | Jenkins full runtime on local machine | Not executed |
 
 > This repository is optimized for assignment/viva demonstration with reproducible local proof.
+
+## 📊 Status Summary
+
+| Item | Status |
+|---|---|
+| Jenkins demo pipeline | SUCCESS |
+| Unit tests | 12 passed |
+| Kubernetes runtime | verified on Minikube |
+| Trivy | executed, 0 CRITICAL |
+| Security runtime user/group | non-root UID/GID 1000:1000 |
+
+## 🧩 Assignment Mapping
+
+| Assignment Topic | Implementation |
+|---|---|
+| CI/CD Pipeline with Jenkins | `Jenkinsfile` + `Jenkinsfile.demo`, GitHub checkout, virtualenv setup, tests |
+| Dockerized App on Kubernetes | Flask API containerized with Docker and deployed to Minikube |
+| Blue-Green Deployment | Blue and Green deployments with Service selector switch/rollback |
+| Secure Healthcare DevOps | Secrets, RBAC, non-root execution, Trivy scan evidence, health probes, resource limits |
+
+## ✅ What Was Runtime Verified
+
+- Jenkins demo pipeline SUCCESS
+- pytest result: 12 passed
+- Docker build/run on host
+- Kubernetes deployment on Minikube
+- Blue-green switch and rollback
+- Trivy scan execution
+- UID/GID hardening (`uid=1000 gid=1000`)
+
+## 🧪 Viva Demo Flow (Short)
+
+1. Show Jenkins SUCCESS pipeline run
+2. Show Kubernetes pods/services
+3. Show main blue version
+4. Show green service version
+5. Patch selector to green and verify
+6. Patch selector back to blue and verify
+7. Show security + Trivy proof
+
+## ⚠️ Known Limitations
+
+- Jenkins Docker container is isolated and does not automatically include host Docker/kubectl/Trivy.
+- Full production CD inside Jenkins requires a properly configured Jenkins agent.
+- Minikube is a single-node local cluster.
+- Healthcare data is dummy/demo-only.
+- Trivy HIGH findings remain, but CRITICAL findings are 0.
 
 ---
 

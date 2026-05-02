@@ -7,7 +7,7 @@ A secure Flask-based healthcare API demonstrating CI/CD and Blue-Green deploymen
 import os
 import json
 from flask import Flask, jsonify, request
-from datetime import datetime
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 
@@ -55,7 +55,7 @@ def index():
         "version": APP_VERSION,
         "environment": ENVIRONMENT,
         "deployment": DEPLOYMENT_COLOR,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }), 200
 
 
