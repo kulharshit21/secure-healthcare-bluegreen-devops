@@ -2,6 +2,14 @@
 
 **A comprehensive DevOps assignment demonstrating secure CI/CD pipeline automation, containerization, and zero-downtime deployment strategy**
 
+![Build Status](https://img.shields.io/badge/build-manual%20verified-success?style=for-the-badge)
+![Kubernetes](https://img.shields.io/badge/kubernetes-minikube-blue?style=for-the-badge&logo=kubernetes)
+![Jenkins Demo](https://img.shields.io/badge/jenkins-demo%20pipeline-orange?style=for-the-badge&logo=jenkins)
+![Trivy](https://img.shields.io/badge/trivy-0%20critical-brightgreen?style=for-the-badge)
+![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python)
+
+![Blue-Green DevOps Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcW5lYzh5Nml1Z3cyMXNwaHp4ZW9xODQ5a2x5dDg5aTI3NGowc3h5NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlBO7eyXzSZkJri/giphy.gif)
+
 ---
 
 ## 📋 Table of Contents
@@ -33,6 +41,17 @@ The healthcare API is a Flask REST application providing patient management endp
 
 Repository naming suggestion for GitHub:
 - `secure-healthcare-bluegreen-devops`
+
+Tags:
+- `devops`
+- `cicd`
+- `jenkins`
+- `kubernetes`
+- `minikube`
+- `blue-green-deployment`
+- `docker`
+- `trivy`
+- `healthcare`
 
 ### Key Value Propositions:
 - **Zero-downtime deployment** using Blue-Green strategy
