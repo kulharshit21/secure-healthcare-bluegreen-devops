@@ -1,0 +1,58 @@
+---
+# Main Healthcare Service - Production traffic routing
+# This service initially points to Blue deployment
+# Jenkins switches this selector to Green during deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthcare-service
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    tier: frontend
+  annotations:
+    description: "Main production service - routes traffic via blue-green selector"
+spec:
+  type: NodePort
+  selector:
+    app: healthcare-api
+    version: blue  # Initially routes to blue - changed during deployment
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    nodePort: 30080
+    protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+
+---
+# Blue Testing Service (optional)
+# Can be used to test Blue deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthcare-blue-service
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    tier: testing
+  annotations:
+    description: "Blue testing service - optional, for Blue validation"
+spec:
+  type: NodePort
+  selector:
+    app: healthcare-api
+    version: blue
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    nodePort: 30082
+    protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800

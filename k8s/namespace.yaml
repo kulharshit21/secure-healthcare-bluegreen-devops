@@ -1,0 +1,12 @@
+---
+# Kubernetes Namespace for Healthcare Application
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: healthcare-devops
+  labels:
+    app: healthcare-api
+    environment: production
+    team: devops
+  annotations:
+    description: "Namespace for secure healthcare API blue-green deployment"

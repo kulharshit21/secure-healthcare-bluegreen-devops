@@ -1,0 +1,69 @@
+---
+# Kubernetes Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: healthcare-api-sa
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    component: rbac
+
+---
+# Kubernetes Role - Limited permissions for blue-green deployment
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: healthcare-api-role
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    component: rbac
+rules:
+  # Permissions for managing deployments
+  - apiGroups: ["apps"]
+    resources: ["deployments", "deployments/status", "deployments/rollback"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  
+  # Permissions for managing pods
+  - apiGroups: [""]
+    resources: ["pods", "pods/logs"]
+    verbs: ["get", "list", "watch"]
+  
+  # Permissions for managing services
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  
+  # Permissions for reading configmaps and secrets
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+  
+  # Permissions for events
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch", "create"]
+
+---
+# Kubernetes RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: healthcare-api-rolebinding
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: healthcare-api-role
+subjects:
+  - kind: ServiceAccount
+    name: healthcare-api-sa
+    namespace: healthcare-devops

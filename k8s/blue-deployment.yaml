@@ -1,0 +1,158 @@
+---
+# Blue Deployment - Current production version
+# This deployment runs the stable version of the application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthcare-api-blue
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    version: blue
+    environment: production
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: healthcare-api
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: healthcare-api
+        version: blue
+        deployment-type: blue-green
+      annotations:
+        security.scan: "trivy"
+        deployment.strategy: "blue-green"
+    spec:
+      serviceAccountName: healthcare-api-sa
+      
+      # Security Context at pod level
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      
+      containers:
+      - name: healthcare-api
+        image: "healthcare-api:blue"
+        imagePullPolicy: IfNotPresent
+        
+        # Container ports
+        ports:
+        - name: http
+          containerPort: 5000
+          protocol: TCP
+        
+        # Environment variables from ConfigMap
+        envFrom:
+        - configMapRef:
+            name: healthcare-api-config
+        
+        # Individual environment variables
+        env:
+        - name: APP_VERSION
+          value: "blue-v1"
+        - name: DEPLOYMENT_COLOR
+          value: "blue"
+        
+        # Secrets mounted as environment variables
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: healthcare-api-secret
+              key: JWT_SECRET
+        
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: healthcare-api-secret
+              key: DATABASE_PASSWORD
+        
+        # Resource requests and limits
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        
+        # Security Context for container
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        
+        # Readiness Probe - Kubernetes checks before sending traffic
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        
+        # Liveness Probe - Kubernetes will restart container if it fails
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        
+        # Startup Probe - Container is given time to start
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        
+        # Volume mounts
+        volumeMounts:
+        - name: tmp
+          mountPath: /app/tmp
+      
+      # Volumes
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      
+      # Node affinity (optional)
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - healthcare-api
+              topologyKey: kubernetes.io/hostname

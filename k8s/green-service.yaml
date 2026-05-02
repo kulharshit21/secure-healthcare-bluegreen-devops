@@ -1,0 +1,29 @@
+---
+# Green Testing Service
+# This service always points to the Green deployment.
+# Jenkins and local smoke tests use it before switching production traffic.
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthcare-green-service
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    tier: testing
+  annotations:
+    description: "Green testing service - allows validation before traffic switch"
+spec:
+  type: NodePort
+  selector:
+    app: healthcare-api
+    version: green
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    nodePort: 30081
+    protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800

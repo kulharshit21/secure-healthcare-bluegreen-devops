@@ -1,0 +1,71 @@
+---
+# NetworkPolicy for Healthcare API Namespace
+# This policy restricts traffic to follow principle of least privilege
+# Note: NetworkPolicy requires a CNI plugin that supports it (not all do by default)
+# For Minikube, ensure Calico or Cilium is enabled
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: healthcare-api-network-policy
+  namespace: healthcare-devops
+  labels:
+    app: healthcare-api
+    component: security
+spec:
+  podSelector:
+    matchLabels:
+      app: healthcare-api
+  
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # Ingress rules - what traffic can enter pods
+  ingress:
+  # Allow traffic from services
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: healthcare-devops
+    ports:
+    - protocol: TCP
+      port: 5000
+  
+  # Allow from kube-system for health checks
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 5000
+  
+  # Egress rules - what traffic can leave pods
+  egress:
+  # Allow DNS queries
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+  
+  # Allow traffic to other pods in same namespace
+  - to:
+    - podSelector:
+        matchLabels:
+          app: healthcare-api
+    ports:
+    - protocol: TCP
+      port: 5000
+  
+  # Allow external HTTPS (for pulling images, external APIs, etc)
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80

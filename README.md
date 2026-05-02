@@ -31,6 +31,9 @@ This project builds an **end-to-end secure CI/CD pipeline** for a Dockerized hea
 
 The healthcare API is a Flask REST application providing patient management endpoints with realistic security practices suitable for a healthcare system.
 
+Repository naming suggestion for GitHub:
+- `secure-healthcare-bluegreen-devops`
+
 ### Key Value Propositions:
 - **Zero-downtime deployment** using Blue-Green strategy
 - **Automatic rollback capability** if issues detected
@@ -394,6 +397,11 @@ cp .env.example .env
 # Edit .env with your values
 # Important: Set DOCKERHUB_USERNAME to your Docker Hub username
 ```
+
+Notes:
+- `.env.example` is a template for local setup.
+- `.env` should remain local and must not be committed.
+- Default demo value uses `DOCKERHUB_USERNAME=kulharshit21`; change it if another user runs the project.
 
 ### Step 2: Python Application Setup (Optional, for local testing)
 
