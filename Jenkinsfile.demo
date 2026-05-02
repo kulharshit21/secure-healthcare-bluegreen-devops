@@ -39,6 +39,7 @@ pipeline {
         stage('2. Environment Info') {
             steps {
                 script {
+                    echo 'Docker/kubectl/Trivy are optional in this Docker Jenkins demo; host runtime proof already exists.'
                     runCmd('python --version', 'python --version')
 
                     try {
@@ -63,10 +64,24 @@ pipeline {
             }
         }
 
-        stage('3. Python Dependency Check') {
+        stage('3. Create Virtual Environment + Install Dependencies') {
             steps {
                 script {
-                    runCmd('python -m pip install -r app/requirements.txt', 'python -m pip install -r app\\requirements.txt')
+                    echo 'Using virtual environment to avoid PEP 668 externally-managed Python restriction.'
+                    if (isUnix()) {
+                        sh '''
+                            python -m venv .venv
+                            . .venv/bin/activate
+                            python -m pip install --upgrade pip
+                            python -m pip install -r app/requirements.txt
+                        '''
+                    } else {
+                        bat '''
+                            python -m venv .venv
+                            .venv\\Scripts\\python -m pip install --upgrade pip
+                            .venv\\Scripts\\python -m pip install -r app\\requirements.txt
+                        '''
+                    }
                 }
             }
         }
@@ -75,9 +90,12 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'python -m pytest app/test_app.py -v'
+                        sh '''
+                            . .venv/bin/activate
+                            python -m pytest app/test_app.py -v
+                        '''
                     } else {
-                        bat 'python -m pytest app\\test_app.py -v'
+                        bat '.venv\\Scripts\\python -m pytest app\\test_app.py -v'
                     }
                 }
             }
