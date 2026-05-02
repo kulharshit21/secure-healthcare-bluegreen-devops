@@ -491,6 +491,16 @@ kubectl cluster-info
 # - Or setup Jenkins in Docker container
 ```
 
+### Jenkins Demo Modes
+
+- `Jenkinsfile` = intended full CI/CD automation (build, scan, push, deploy/switch/rollback) for a properly configured Jenkins agent.
+- `Jenkinsfile.demo` = safe local Jenkins viva pipeline:
+  - runs checkout + Python dependency + pytest
+  - attempts Docker/kubectl/Trivy commands
+  - marks unavailable tooling as UNSTABLE instead of failing the whole demo
+- If Jenkins agent does not have Docker/kubectl configured, use `Jenkinsfile.demo` for CI proof and Minikube terminal screenshots for CD proof.
+- If running Jenkins in Docker locally, prefer `http://localhost:9090` to avoid conflict with Kubernetes demo port-forward usage on `8080`.
+
 ---
 
 ## 🔄 Blue-Green Deployment Flow

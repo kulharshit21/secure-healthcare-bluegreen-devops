@@ -92,6 +92,17 @@ Because `kubectl port-forward` can pin to an existing backend, the main port-for
 - Minikube is a single-node local cluster, not production HA
 - Demo uses dummy patient data only
 
+## 9) Jenkins Demo Runtime Status
+
+- Jenkins service check:
+  - `Get-Service *jenkins* -ErrorAction SilentlyContinue` returned no service
+- Jenkins Docker check:
+  - `docker ps -a | findstr jenkins` returned no container
+- Status:
+  - `Jenkinsfile.demo` prepared for Jenkins demo
+  - Jenkins demo execution requires Jenkins setup
+  - Jenkins was not executed in this environment during this verification cycle
+
 ## Final Statement
 
 Runtime-verified locally on Minikube except Jenkins execution.
